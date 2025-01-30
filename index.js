@@ -20,7 +20,7 @@ const noIntervalsMessage = document.getElementById('no-intervals-message');
 
 function createIntervalRow(name, color = '#FFFFFF', minutes = '0', seconds = '30') {
     const intervalItem = document.createElement('div');
-    intervalItem.className = 'flex items-center space-x-4 bg-white p-2 shadow-sm';
+    intervalItem.className = 'flex items-center space-x-4 bg-white p-2 shadow-sm min-w-[600px]';
 
     // Drag button
     const dragButton = document.createElement('button');
