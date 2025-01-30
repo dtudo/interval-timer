@@ -18,7 +18,7 @@ const intervalCurrentTimeDisplay = document.getElementById('interval-current-tim
 const intervalTitle = document.getElementById('interval-title');
 const noIntervalsMessage = document.getElementById('no-intervals-message');
 
-function createIntervalRow(name, color = '#FFFFFF', minutes = '0', seconds = '30') {
+function createIntervalRow(name, color = '#BBBBBB', minutes = '0', seconds = '30') {
     const intervalItem = document.createElement('div');
     intervalItem.className = 'flex items-center space-x-4 bg-white p-2 shadow-sm min-w-[600px]';
 
@@ -38,7 +38,7 @@ function createIntervalRow(name, color = '#FFFFFF', minutes = '0', seconds = '30
     const colorInput = document.createElement('input');
     colorInput.type = 'color';
     colorInput.value = color;
-    colorInput.className = 'w-10 h-10 cursor-pointer';
+    colorInput.className = 'w-10 h-10 cursor-pointer shadow';
 
     // Minutes input
     const minutesContainer = document.createElement('div');
