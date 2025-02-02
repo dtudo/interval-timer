@@ -18,6 +18,19 @@ const intervalCurrentTimeDisplay = document.getElementById('interval-current-tim
 const intervalTitle = document.getElementById('interval-title');
 const noIntervalsMessage = document.getElementById('no-intervals-message');
 
+// URL configuration
+const urlParams = new URLSearchParams(window.location.search);
+const intervalsParam = urlParams.get('intervals');
+
+if (intervalsParam) {
+    // Decoder/Encoder: https://meyerweb.com/eric/tools/dencoder/
+    const configLines = decodeURIComponent(intervalsParam).split("\n").filter(Boolean);
+    applyIntervalsConfiguration(configLines);
+} else {
+    // Default configuration
+    createIntervalRow();
+}
+
 function createIntervalRow(name, color = '#BBBBBB', minutes = '0', seconds = '30') {
     const intervalItem = document.createElement('div');
     intervalItem.className = 'flex items-center space-x-4 bg-white p-2 shadow-sm min-w-[600px]';
@@ -83,6 +96,11 @@ function createIntervalRow(name, color = '#BBBBBB', minutes = '0', seconds = '30
 addIntervalButton.addEventListener('click', () => createIntervalRow());
 
 copyConfigButton.addEventListener("click", () => {
+    const configText = getCurrentIntervalsConfigurationAsString();
+    navigator.clipboard.writeText(configText).then(() => alert("Configuration copied!"));
+});
+
+function getCurrentIntervalsConfigurationAsString() {
     const intervals = Array.from(intervalList.children).map(row => {
         const inputs = row.querySelectorAll("input");
 
@@ -92,12 +110,16 @@ copyConfigButton.addEventListener("click", () => {
         const seconds = inputs[3].value.trim();
         return `${name}, ${color}, ${minutes}, ${seconds}`;
     });
-    const configText = intervals.join("\n");
-    navigator.clipboard.writeText(configText).then(() => alert("Configuration copied!"));
-});
+
+    return intervals.join("\n");
+}
 
 applyConfigButton.addEventListener("click", () => {
     const configLines = pasteConfigInput.value.split("\n").filter(Boolean);
+    applyIntervalsConfiguration(configLines);
+});
+
+function applyIntervalsConfiguration(configLines) {
     intervalList.innerHTML = "";
 
     configLines.forEach((line) => {
@@ -106,7 +128,7 @@ applyConfigButton.addEventListener("click", () => {
     });
 
     pasteConfigModal.classList.add("hidden");
-});
+}
 
 pasteConfigButton.addEventListener("click", () => {
     pasteConfigModal.classList.remove("hidden");
@@ -250,9 +272,6 @@ new Sortable(intervalList, {
     handle: '.drag-handle',
     animation: 150
 });
-
-// Initial example row
-createIntervalRow();
 
 const observer = new MutationObserver(() => {
     if (intervalList.children.length === 0) {
